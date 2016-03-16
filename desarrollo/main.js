@@ -41,8 +41,10 @@ let presionaTecla = opc =>
         }
         else //jmeter
         {
+            counter = val = "";
             setActivado = false;
             utils.accesoDOM("lcd").innerHTML = "";
+            utils.accesoDOM("mesage").innerHTML = "";
             sendOptions(nivel,operacion);
         }
     }
@@ -52,12 +54,16 @@ let presionaTecla = opc =>
         {   
             val = val.concat(opc);
             utils.accesoDOM("lcd").innerHTML += opc;
-            if(eval(val) === eval(resultado)){
-               counter++;
+            
+            if(eval(val) === eval(resultado)) {
+                counter++;
+                utils.accesoDOM("mesage").innerHTML = `Su puntaje es: ${counter}`;
+                resultado = val = "";
                 sendOptions(nivel,operacion);
-                resultado = 0;
             } else {
-
+                if(val.length >= resultado.length) {
+                    utils.accesoDOM("lcd").innerHTML.substring(0,utils.accesoDOM("lcd").innerHTML.length - val.length);
+                }
             }
         }
             
@@ -114,7 +120,7 @@ let sendOptions = (nivel,operacion) => {
 let returnRandom = (value,operador) => {
         let random1 = Math.floor(Math.random() *(value-valorMaximo+1)+valorMaximo);
         let random2 = Math.floor(Math.random() *(value-valorMaximo+1)+valorMaximo);
-        resultado = `${random1}${operador}${random2}`;
+        resultado = eval(random1+operador+random2);
         console.log(resultado);
             utils.accesoDOM("lcd").innerHTML = "";
             utils.accesoDOM("lcd").innerHTML = `${random1}&nbsp;${operador}&nbsp;${random2} : `;
